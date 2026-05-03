@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pinnate Consulting LLC — Secure Client Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --pine:#2d6a3f; --pine-d:#1f4a2c; --pine-l:#4aa862; --pine-pale:#d8f0e0;
+  --ocean:#1a6b7a; --ocean-l:#3aa8c0; --ocean-pale:#cef0f7;
+  --gold:#c09a4e; --gold-l:#d4af6a; --gold-pale:#f5edd8;
+  --rose:#a85060; --rose-pale:#fae4e8;
+  --sage:#5c8a68; --sage-pale:#e2f0e6;
+  --amber:#b86e2a; --amber-pale:#faebd7;
+  --cobalt:#3a5fa0; --cobalt-pale:#dde6f7;
+  --slate:#607d8b; --slate-pale:#e8eef2;
+  --white:#fff; --ink:#0d2016; --ink-m:#2e4a38; --ink-l:#6a8a74;
+  --border:#c0dac8; --bs:#dceee4;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;
+  background:
+    radial-gradient(ellipse 70% 60% at 0% 0%,   rgba(74,168,98,.20) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 0%,  rgba(58,168,192,.18) 0%,transparent 60%),
+    radial-gradient(ellipse 55% 55% at 50% 100%, rgba(42,143,163,.16) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 40% at 100% 100%,rgba(45,106,63,.14)  0%,transparent 55%),
+    linear-gradient(160deg,#e8f6ee 0%,#e0f4f8 40%,#e6f7f0 70%,#d6eff8 100%);
+  background-attachment:fixed;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(45,106,63,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(26,107,122,.05) 1px,transparent 1px);
+  background-size:54px 54px;
+}
+
+/* ── HEADER ─────────────────────────────────────── */
+.hdr{position:relative;z-index:20;background:linear-gradient(100deg,#1f4a2c 0%,#2d6a3f 40%,#1a5c70 80%,#124e62 100%);box-shadow:0 3px 20px rgba(14,31,22,.38)}
+.hdr-inner{max-width:1340px;margin:0 auto;padding:0 36px;height:88px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+
+/* Logo area — two leaf images + company name */
+.brand{display:flex;align-items:center;gap:14px}
+.logo-wrap{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.leaf-frame{
+  width:52px;height:46px;border-radius:12px;overflow:hidden;
+  border:2px solid rgba(255,255,255,.22);
+  box-shadow:0 2px 10px rgba(0,0,0,.25);
+  background:linear-gradient(135deg,#3a8a50,#6dbc80,#a8e0a8,#5aaa68);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.leaf-frame svg{width:100%;height:100%}
+.brand-mid{display:flex;flex-direction:column;gap:2px;padding:0 6px}
+.brand-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#ffffff;letter-spacing:.3px;line-height:1;white-space:nowrap}
+.brand-tag{font-size:8.5px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.55);line-height:1.2}
+
+.hdr-contacts{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.hci{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.85);text-decoration:none;transition:color .2s}
+.hci:hover{color:#a0eecc}
+.hci-ic{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.hci-w .hci-ic{background:rgba(58,168,192,.28)} .hci-m .hci-ic{background:rgba(192,154,78,.28)} .hci-p{color:#ffffff!important} .hci-p .hci-ic{background:rgba(255,140,150,.25)}
+
+/* ── PAGE SWITCHER ───────────────────────────────── */
+.pg{display:none;position:relative;z-index:1} .pg.on{display:block}
+
+/* ══ CSS AUTH GATE — checkbox-driven page switch ════ */
+#auth-gate:checked ~ #pg-auth { display:none !important; }
+#auth-gate:checked ~ #pg-dash { display:flex !important; }
+
+/* ══ PAGE 1 — AUTH ══════════════════════════════════ */
+#pg-auth{min-height:calc(100vh - 88px);display:flex;align-items:center;justify-content:center;padding:52px 20px}
+#pg-auth.on{display:flex}
+.auth-shell{width:100%;max-width:1000px;display:grid;grid-template-columns:1fr 1fr;background:var(--white);border-radius:26px;box-shadow:0 20px 80px rgba(14,31,22,.20);border:1px solid rgba(192,218,200,.6);overflow:hidden;animation:riseIn .65s cubic-bezier(.22,1,.36,1) both}
+@keyframes riseIn{from{opacity:0;transform:translateY(40px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.auth-l{background:linear-gradient(160deg,#1c3c2a 0%,#2a5e40 42%,#18566c 82%,#124868 100%);padding:50px 40px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.auth-l::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")}
+.l-top{position:relative;z-index:1}
+.l-mark{width:56px;height:56px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);border-radius:15px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#9ee8c0;margin-bottom:24px}
+.l-top h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:600;color:#fff;line-height:1.35;margin-bottom:12px}
+.l-top p{font-size:12.5px;color:rgba(255,255,255,.56);line-height:1.75}
+.pillars{position:relative;z-index:1;display:flex;flex-direction:column;gap:14px;margin-top:32px}
+.pillar{display:flex;align-items:flex-start;gap:10px}
+.p-dot{width:7px;height:7px;border-radius:50%;background:#9ee8c0;margin-top:5px;flex-shrink:0}
+.pillar p{font-size:11.5px;color:rgba(255,255,255,.54);line-height:1.65}
+.pillar strong{color:rgba(255,255,255,.82);font-weight:500}
+.l-foot{position:relative;z-index:1;margin-top:30px;font-size:10px;color:rgba(255,255,255,.26)}
+
+.auth-r{padding:46px 42px;display:flex;flex-direction:column}
+.tabs{display:flex;background:#edf7f1;border-radius:10px;padding:4px;margin-bottom:28px;border:1px solid var(--bs)}
+.tab{flex:1;padding:9px 6px;border:none;background:transparent;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:500;color:var(--ink-l);cursor:pointer;transition:all .25s}
+.tab.on{background:var(--white);color:var(--ink);box-shadow:0 2px 8px rgba(14,31,22,.09)}
+.fsec{display:none} .fsec.on{display:block}
+.fhd{margin-bottom:22px}
+.fhd h3{font-family:'Playfair Display',serif;font-size:21px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.fhd p{font-size:12px;color:var(--ink-l);line-height:1.65}
+.f-sep{width:36px;height:2.5px;background:linear-gradient(90deg,var(--pine),var(--ocean));border-radius:2px;margin-top:9px}
+.fg{margin-bottom:15px}
+.fg label{display:block;font-size:10px;font-weight:600;letter-spacing:1.7px;text-transform:uppercase;color:var(--ink-m);margin-bottom:6px}
+.fg input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:#f2faf5;transition:all .2s;outline:none}
+.fg input:focus{border-color:var(--pine);background:var(--white);box-shadow:0 0 0 3px rgba(45,106,63,.12)}
+.fg input::placeholder{color:var(--ink-l)}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.info-card{background:#e5f5ec;border:1px solid rgba(45,106,63,.20);border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start}
+.info-card p{font-size:11px;color:#1a4030;line-height:1.65} .info-card strong{font-weight:600}
+.alert{border-radius:10px;padding:11px 14px;font-size:11.5px;line-height:1.6;margin-bottom:14px;display:none;align-items:flex-start;gap:8px}
+.alert.show{display:flex} .a-ic{font-size:14px;flex-shrink:0;margin-top:1px}
+.a-err{background:var(--rose-pale);border:1px solid #f0c0c8;color:var(--rose)}
+.a-ok{background:#e0f5e8;border:1px solid #a8d8b8;color:#1e5a38}
+.btn-main{width:100%;padding:13px;background:linear-gradient(135deg,var(--pine-d) 0%,var(--pine) 50%,var(--ocean) 100%);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:#fff;letter-spacing:.5px;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px rgba(45,106,63,.36);margin-top:5px}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(45,106,63,.46)} .btn-main:active{transform:translateY(0)} .btn-main:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.afoot{text-align:center;margin-top:18px;font-size:11px;color:var(--ink-l)}
+.afoot a{color:var(--pine);text-decoration:none;font-weight:500} .afoot a:hover{color:var(--ocean)}
+
+/* ══ PAGE 2 — DASHBOARD ════════════════════════════ */
+#pg-dash{min-height:calc(100vh - 88px);flex-direction:column} #pg-dash.on{display:flex}
+
+.ribbon{background:rgba(255,255,255,.78);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:22px 52px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 14px rgba(14,31,22,.07);animation:fadeSlide .5s ease both}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+.ribbon-l h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ink)}
+.ribbon-l p{font-size:12px;color:var(--ink-l);margin-top:3px}
+.ribbon-r{display:flex;align-items:center;gap:12px}
+.user-pill{display:flex;align-items:center;gap:9px;background:var(--white);border:1px solid var(--border);border-radius:40px;padding:5px 14px 5px 5px;box-shadow:0 2px 10px rgba(14,31,22,.08)}
+.u-ava{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--pine),var(--ocean-l));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:#fff}
+.u-info strong{display:block;font-size:12px;font-weight:600;color:var(--ink)} .u-info span{font-size:10px;color:var(--ink-l)}
+.btn-sm{padding:8px 16px;background:var(--white);border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--ink-m);cursor:pointer;transition:all .2s}
+.btn-sm:hover{border-color:var(--rose);color:var(--rose);background:var(--rose-pale)}
+.btn-admin{border-color:var(--amber)!important;color:var(--amber)!important} .btn-admin:hover{background:var(--amber-pale)!important}
+
+/* Dash nav tabs */
+.dash-nav{background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:0 52px;display:flex;gap:0;overflow-x:auto}
+.dnav{padding:13px 18px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--ink-l);cursor:pointer;transition:all .2s;border-bottom:2.5px solid transparent;white-space:nowrap}
+.dnav.on{color:var(--pine);border-bottom-color:var(--pine);font-weight:600}
+.dnav:hover{color:var(--pine)}
+.dnav.special{color:var(--ocean);font-weight:600} .dnav.special.on{border-bottom-color:var(--ocean)}
+.dnav.storage{color:var(--amber);font-weight:600} .dnav.storage.on{border-bottom-color:var(--amber)}
+.dnav.admin-tab{color:var(--rose);font-weight:600} .dnav.admin-tab.on{border-bottom-color:var(--rose)}
+
+/* Dash panels */
+.dpanel{display:none;padding:32px 52px 60px} .dpanel.on{display:block}
+
+/* Security strip */
+.sec-strip{background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border:1px solid rgba(192,154,78,.32);border-radius:10px;padding:11px 18px;display:flex;align-items:center;gap:11px;margin-bottom:28px;box-shadow:0 2px 10px rgba(14,31,22,.05)}
+.sec-strip p{font-size:11px;color:#5a4010;line-height:1.5} .sec-strip strong{font-weight:600}
+
+/* Apps grid */
+.apps-hd{margin-bottom:20px} .apps-hd h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--ink)} .apps-hd p{font-size:12px;color:var(--ink-l);margin-top:3px}
+.grid-8{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.tile{background:rgba(255,255,255,.84);backdrop-filter:blur(10px);border:1px solid rgba(192,218,200,.7);border-radius:18px;padding:24px 20px 18px;cursor:pointer;transition:all .32s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;box-shadow:0 2px 12px rgba(14,31,22,.07);display:flex;flex-direction:column;gap:11px;animation:tileUp .5s cubic-bezier(.22,1,.36,1) both}
+.tile::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:18px 18px 0 0;transition:height .3s}
+.tile:hover{transform:translateY(-6px);box-shadow:0 18px 50px rgba(14,31,22,.16);background:var(--white);border-color:transparent} .tile:hover::after{height:5px}
+.tile:nth-child(1){animation-delay:.06s}.tile:nth-child(2){animation-delay:.12s}.tile:nth-child(3){animation-delay:.18s}.tile:nth-child(4){animation-delay:.24s}.tile:nth-child(5){animation-delay:.30s}.tile:nth-child(6){animation-delay:.36s}.tile:nth-child(7){animation-delay:.42s}.tile:nth-child(8){animation-delay:.48s}
+@keyframes tileUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.c1::after{background:linear-gradient(90deg,#2d6a3f,#4aa862)}.c2::after{background:linear-gradient(90deg,#1a6b7a,#3aa8c0)}.c3::after{background:linear-gradient(90deg,#2a7a5a,#5ab898)}.c4::after{background:linear-gradient(90deg,#3a5fa0,#5a82cc)}.c5::after{background:linear-gradient(90deg,#c09a4e,#d4af6a)}.c6::after{background:linear-gradient(90deg,#2e6e60,#4aa898)}.c7::after{background:linear-gradient(90deg,#1e5a7a,#3a8ab0)}.c8::after{background:linear-gradient(90deg,#5a7a2e,#88b848)}
+.t-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px}
+.c1 .t-icon{background:#d8f0e0}.c2 .t-icon{background:#cef0f7}.c3 .t-icon{background:#d0ede4}.c4 .t-icon{background:var(--cobalt-pale)}.c5 .t-icon{background:var(--gold-pale)}.c6 .t-icon{background:#d0ece6}.c7 .t-icon{background:#d0e8f2}.c8 .t-icon{background:#e4f0d0}
+.t-name{font-family:'Playfair Display',serif;font-size:14.5px;font-weight:600;color:var(--ink);margin-bottom:3px;line-height:1.25} .t-sub{font-size:10.5px;color:var(--ink-l);line-height:1.5}
+.t-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--bs);padding-top:10px}
+.t-lbl{font-size:9.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-l)} .t-arr{font-size:15px;color:var(--border);transition:all .2s} .tile:hover .t-arr{color:var(--pine);transform:translateX(4px)}
+
+/* ── STORAGE FACILITY ─────────────────────────────── */
+.storage-wrap h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.storage-wrap > p{font-size:12.5px;color:var(--ink-l);margin-bottom:24px;line-height:1.6}
+.storage-path-bar{background:linear-gradient(90deg,#e8f5ee,#e0f4f8);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:12px;color:var(--ink-m);font-family:monospace;margin-bottom:22px;display:flex;align-items:center;gap:8px;box-shadow:inset 0 1px 4px rgba(14,31,22,.06)}
+.storage-path-bar span{color:var(--pine);font-weight:600}
+.sf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.sf-folder{background:rgba(255,255,255,.85);border:1px solid var(--border);border-radius:14px;padding:20px 18px;cursor:pointer;transition:all .25s;box-shadow:0 2px 10px rgba(14,31,22,.06)}
+.sf-folder:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(14,31,22,.12);background:var(--white)}
+.sf-folder-icon{font-size:28px;margin-bottom:10px}
+.sf-folder-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.sf-folder-meta{font-size:11px;color:var(--ink-l)}
+.sf-reports{background:rgba(255,255,255,.85);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(14,31,22,.06)}
+.sf-reports-hd{background:linear-gradient(90deg,var(--pine-d),var(--ocean));padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.sf-reports-hd h4{font-family:'Playfair Display',serif;font-size:15px;font-weight:600;color:#fff}
+.sf-search{padding:6px 12px;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;background:rgba(255,255,255,.18);color:#fff;outline:none;width:200px} .sf-search::placeholder{color:rgba(255,255,255,.6)}
+.sf-filter-row{display:flex;gap:10px;padding:14px 20px;border-bottom:1px solid var(--bs);flex-wrap:wrap}
+.sf-filter-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:var(--ink-m);cursor:pointer;transition:all .2s}
+.sf-filter-btn.on{background:var(--pine);border-color:var(--pine);color:#fff}
+.sf-table{width:100%;border-collapse:collapse}
+.sf-table th{padding:10px 20px;text-align:left;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-l);border-bottom:1px solid var(--bs);background:#f8fcf9}
+.sf-table td{padding:12px 20px;font-size:12.5px;color:var(--ink-m);border-bottom:1px solid var(--bs)}
+.sf-table tr:last-child td{border-bottom:none}
+.sf-table tr:hover td{background:#f2faf5}
+.report-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:500}
+.tag-green{background:var(--pine-pale);color:var(--pine)} .tag-blue{background:var(--ocean-pale);color:var(--ocean)} .tag-gold{background:var(--gold-pale);color:var(--amber)}
+.btn-restore{padding:5px 12px;border:1.5px solid var(--pine);border-radius:7px;background:transparent;color:var(--pine);font-size:11px;font-weight:500;cursor:pointer;transition:all .2s} .btn-restore:hover{background:var(--pine);color:#fff}
+.btn-print{padding:5px 12px;border:1.5px solid var(--ocean);border-radius:7px;background:transparent;color:var(--ocean);font-size:11px;font-weight:500;cursor:pointer;transition:all .2s;margin-left:5px} .btn-print:hover{background:var(--ocean);color:#fff}
+
+/* ── USER MANUAL ──────────────────────────────────── */
+.manual-wrap{max-width:860px}
+.manual-wrap h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.manual-wrap > .intro{font-size:13px;color:var(--ink-l);margin-bottom:28px;line-height:1.7}
+.manual-section{background:rgba(255,255,255,.82);border:1px solid var(--border);border-radius:14px;padding:24px 26px;margin-bottom:18px;box-shadow:0 2px 10px rgba(14,31,22,.06)}
+.manual-section h4{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.manual-section h4 .ms-icon{font-size:18px}
+.manual-section p,.manual-section li{font-size:12.5px;color:var(--ink-m);line-height:1.75}
+.manual-section ul,.manual-section ol{padding-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.manual-section .step{background:linear-gradient(90deg,#eaf6ee,#e2f4f8);border-radius:8px;padding:10px 14px;margin-top:8px;font-size:12px;color:var(--ink-m);display:flex;align-items:flex-start;gap:10px}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--pine);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.manual-tip{background:linear-gradient(90deg,#fff8e8,#fffbf0);border:1px solid rgba(192,154,78,.3);border-radius:8px;padding:10px 14px;margin-top:10px;font-size:11.5px;color:#6a4a10;display:flex;gap:8px;align-items:flex-start}
+
+/* ── ADMIN PANEL ──────────────────────────────────── */
+.admin-wrap h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--rose);margin-bottom:6px}
+.admin-wrap > .admin-intro{font-size:12.5px;color:var(--ink-l);margin-bottom:24px;line-height:1.65}
+.admin-notice{background:linear-gradient(90deg,#fae4e8,#fdf0f2);border:1px solid #f0c0c8;border-radius:10px;padding:12px 16px;margin-bottom:22px;font-size:12px;color:var(--rose);display:flex;gap:10px;align-items:flex-start} .admin-notice strong{font-weight:600}
+.request-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 10px rgba(14,31,22,.07);transition:box-shadow .2s}
+.request-card:hover{box-shadow:0 6px 24px rgba(14,31,22,.12)}
+.rc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px}
+.rc-person strong{display:block;font-size:15px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.rc-person span{font-size:12px;color:var(--ink-l)}
+.rc-badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;flex-shrink:0}
+.badge-pending{background:#fff8e8;border:1px solid #f0d890;color:#8a6010}
+.badge-approved{background:var(--pine-pale);border:1px solid #a0d8b0;color:var(--pine-d)}
+.badge-denied{background:var(--rose-pale);border:1px solid #f0c0c8;color:var(--rose)}
+.rc-details{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.rc-field{background:#f4faf6;border-radius:8px;padding:9px 12px}
+.rc-field label{display:block;font-size:9.5px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--ink-l);margin-bottom:3px}
+.rc-field p{font-size:12.5px;color:var(--ink-m)}
+.rc-actions{border-top:1px solid var(--bs);padding-top:14px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.rc-comment{flex:1}
+.rc-comment label{display:block;font-size:10px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--ink-m);margin-bottom:6px}
+.rc-comment textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);background:#f4faf6;resize:vertical;min-height:64px;outline:none;transition:all .2s}
+.rc-comment textarea:focus{border-color:var(--pine);background:var(--white);box-shadow:0 0 0 3px rgba(45,106,63,.10)}
+.rc-buttons{display:flex;flex-direction:column;gap:8px;padding-top:22px}
+.btn-approve{padding:9px 20px;background:linear-gradient(135deg,var(--pine),var(--pine-l));border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#fff;cursor:pointer;transition:all .2s;box-shadow:0 3px 10px rgba(45,106,63,.3);white-space:nowrap}
+.btn-approve:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(45,106,63,.4)}
+.btn-deny{padding:9px 20px;background:var(--white);border:1.5px solid var(--rose);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--rose);cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-deny:hover{background:var(--rose-pale)}
+.userid-assign{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.userid-assign label{font-size:10px;font-weight:600;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink-m)}
+.userid-assign input{padding:7px 11px;border:1.5px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);background:#f4faf6;outline:none;width:140px;transition:all .2s}
+.userid-assign input:focus{border-color:var(--pine);background:var(--white)}
+.userid-assign .pw-in{width:160px}
+.howto-admin{background:#e8f5ee;border:1px solid rgba(45,106,63,.2);border-radius:10px;padding:14px 18px;font-size:12px;color:#1a4030;line-height:1.7;margin-bottom:22px}
+.howto-admin strong{font-weight:600;color:var(--pine-d)}
+
+/* DASHBOARD FOOTER */
+.dash-foot{border-top:1px solid var(--border);background:rgba(255,255,255,.75);backdrop-filter:blur(8px);padding:16px 52px;display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.dash-foot p{font-size:11px;color:var(--ink-l)} .dash-foot a{color:var(--pine);text-decoration:none;font-weight:500}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.grid-8{grid-template-columns:repeat(2,1fr)}.sf-grid{grid-template-columns:repeat(2,1fr)}.rc-details{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.auth-shell{grid-template-columns:1fr}.auth-l{display:none}.hdr-inner{height:auto;padding:14px 20px;flex-direction:column;align-items:flex-start;gap:10px}.dpanel,.ribbon,.dash-nav{padding-left:16px;padding-right:16px}.grid-8{grid-template-columns:1fr}.sf-grid{grid-template-columns:1fr}.dash-foot{flex-direction:column;gap:6px;text-align:center;padding:14px 20px}.ribbon{flex-direction:column;align-items:flex-start;gap:14px}.rc-details{grid-template-columns:1fr}.rc-actions{flex-direction:column}}
+
+/* ══ PERFORMANCE DASHBOARD TITLE ══════════════════════ */
+.perf-dash-title{
+  font-family:'Playfair Display',serif;
+  font-size:28px;
+  font-weight:700;
+  background:linear-gradient(120deg,#1f4a2c 0%,#2d6a3f 45%,#1a5c70 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-.5px;
+  line-height:1.1;
+  margin-bottom:6px;
+}
+#dash-greet{
+  font-size:13.5px;
+  color:var(--ink-m);
+  font-weight:500;
+  margin:0;
+}
+/* ══ HIDE MINUS BUTTON (user-pill collapse) ══════════ */
+.u-collapse, [data-action="collapse"], button.btn-collapse { display:none !important; }
+/* Sign out button clean style */
+.btn-signout{
+  background:transparent;
+  border:1.5px solid var(--border);
+  color:var(--ink-m);
+}
+.btn-signout:hover{
+  background:var(--rose-pale);
+  border-color:#f0c0c8;
+  color:var(--rose);
+}
+</style>
+</head>
+<body>
+
+<!-- CSS-only auth gate checkbox -->
+<input type="checkbox" id="auth-gate" style="display:none"/>
+
+<!-- ═══ HEADER ════════════════════════════════════════════ -->
+<header class="hdr">
+  <div class="hdr-inner">
+
+    <!-- Logo: two leaf frames + company name between them -->
+    <div class="brand">
+      <img src="data:image/png;base64,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" 
+           alt="Pinnate Consulting LLC Logo"
+           style="height:80px;width:auto;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.25));"
+      />
+      <div class="brand-words">
+        <h1 style="color:#ffffff!important;">Pinnate Consulting LLC</h1>
+        <div class="brand-tag">Operational Intelligence &nbsp;·&nbsp; Diagnostics &nbsp;·&nbsp; Billing Automation</div>
+      </div>
+    </div>
+
+    <!-- Contact info -->
+    <div class="hdr-contacts">
+      <a href="https://www.pinnateconsulting.com" class="hci hci-w" target="_blank">
+        <div class="hci-ic">🌐</div><span>www.pinnateconsulting.com</span>
+      </a>
+      <a href="mailto:gamal@pinnateconsulting.com" class="hci hci-m">
+        <div class="hci-ic">✉</div><span>gamal@pinnateconsulting.com</span>
+      </a>
+      <a href="tel:+12817962525" class="hci hci-p">
+        <div class="hci-ic">📞</div><span>+1 281 796 2525</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ PAGE 1 — AUTHENTICATION ══════════════════════ -->
+<section class="pg on" id="pg-auth">
+  <div class="auth-shell">
+
+    <div class="auth-l">
+      <div class="l-top">
+        <h2>Your Secure<br>Business Hub</h2>
+        <p>All your Pinnate Consulting applications and cloud-saved data — exclusively for authorized, subscription-verified users.</p>
+        <div class="pillars">
+          <div class="pillar"><div class="p-dot"></div><p><strong>Subscription-gated access.</strong> One dedicated approver handles all requests — same day to next business day.</p></div>
+          <div class="pillar"><div class="p-dot"></div><p><strong>Cloud-saved data.</strong> Every report and file is stored securely and retrievable from any device via The Storage Facility.</p></div>
+          <div class="pillar"><div class="p-dot"></div><p><strong>Protected applications.</strong> App source files are invisible to users — only the portal administrator has full access.</p></div>
+          <div class="pillar"><div class="p-dot"></div><p><strong>Built-in User Manual.</strong> A complete guide is available inside the portal once you sign in — step-by-step for every feature.</p></div>
+        </div>
+      </div>
+      <div class="l-foot">© 2025 Pinnate Consulting LLC · All rights reserved</div>
+    </div>
+
+    <div class="auth-r">
+      <div class="tabs">
+        <button class="tab on" id="tab-in"  data-action="tab-in">Sign In</button>
+        <button class="tab"   id="tab-req"  data-action="tab-req">Request Access</button>
+      </div>
+
+      <!-- SIGN IN -->
+      <div class="fsec on" id="fsec-in">
+        <div class="fhd">
+          <h3>Welcome Back</h3>
+          <p>Enter the credentials issued to you after your subscription was verified and approved.</p>
+          <div class="f-sep"></div>
+        </div>
+        <div class="alert a-err" id="err-in"><span class="a-ic">⚠</span><span id="err-in-txt">Incorrect ID or password.</span></div>
+        <div class="fg"><label>User ID</label><input type="text" id="in-id" placeholder="Your assigned User ID" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/></div>
+        <div class="fg"><label>Password</label>
+          <div style="position:relative;">
+            <input type="password" id="in-pw" placeholder="Your password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="in-pw-field" style="padding-right:44px;width:100%;padding:11px 44px 11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:#f2faf5;transition:all .2s;outline:none;"/>
+            <button type="button" onclick="var f=document.getElementById('in-pw');f.type=f.type==='password'?'text':'password';this.textContent=f.type==='password'?'👁':'🙈'" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;padding:4px;line-height:1;">👁</button>
+          </div>
+        </div>
+        <button type="button" class="btn-main" id="btn-signin" style="display:block;text-align:center;cursor:pointer;width:100%;border:none;" data-action="signin">Sign In to Portal</button>
+        <div class="afoot">No account? <a href="#" data-action="tab-req">Request access →</a><br><br>Need help? <a href="mailto:gamal@pinnateconsulting.com">Contact us</a></div>
+      </div>
+
+      <!-- REQUEST ACCESS -->
+      <div class="fsec" id="fsec-req">
+        <div class="fhd">
+          <h3>Request Portal Access</h3>
+          <p>Fill in your details. Our dedicated approver will verify your company's subscription and respond <strong>same day to next business day</strong>.</p>
+          <div class="f-sep"></div>
+        </div>
+        <div class="alert a-err" id="err-req"><span class="a-ic">⚠</span><span id="err-req-txt">Please fill in all required fields.</span></div>
+        <div class="alert a-ok"  id="ok-req" ><span class="a-ic">✓</span><div><strong>Almost done — one more step!</strong><br>Your email app has opened with the request pre-filled and addressed to <strong>gamal@pinnateconsulting.com</strong>. Please <strong>click Send</strong> in your email app to complete the submission. Pinnate Consulting will review your request and send your credentials within one business day.</div></div>
+        <div class="info-card"><span style="font-size:15px;flex-shrink:0;">ℹ</span><p><strong>Subscription required.</strong> One dedicated approver at Pinnate Consulting handles all access decisions — expect a response same day to next business day.</p></div>
+        <div class="fg-row">
+          <div class="fg"><label>First Name *</label><input type="text" id="req-fn" placeholder="First name"/></div>
+          <div class="fg"><label>Last Name *</label><input type="text" id="req-ln" placeholder="Last name"/></div>
+        </div>
+        <div class="fg"><label>Company / Organization *</label><input type="text" id="req-co" placeholder="Your company name"/></div>
+        <div class="fg"><label>Business Email *</label><input type="email" id="req-em" placeholder="your@company.com"/></div>
+        <div class="fg"><label>Phone Number</label><input type="tel" id="req-ph" placeholder="+1 (XXX) XXX-XXXX"/></div>
+        <div class="fg"><label>Reason for Access</label><input type="text" id="req-rs" placeholder="Briefly describe intended use"/></div>
+        <div style="background:#e8f4fd;border-left:4px solid #1a5c70;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:12.5px;color:#124e62;line-height:1.6;">
+          <strong>📧 How this works:</strong> Clicking the button below will open your email app (Outlook or similar) with a pre-filled request addressed to <strong>gamal@pinnateconsulting.com</strong>. You must click <strong>Send</strong> in your email app to complete the submission.
+        </div>
+        <button type="button" class="btn-main" id="btn-req">Submit Access Request</button>
+        <div class="afoot">Already approved? <a href="#" data-action="tab-in">Sign in →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PAGE 2 — DASHBOARD ════════════════════════════ -->
+<section class="pg" id="pg-dash">
+
+  <div class="ribbon">
+    <div class="ribbon-l">
+      <div class="perf-dash-title">Performance Dashboard</div>
+      <p id="dash-greet">Welcome — your applications are ready below.</p>
+    </div>
+    <div class="ribbon-r">
+      <div class="user-pill">
+        <div class="u-ava" id="dash-ava"></div>
+        <div class="u-info"><strong id="dash-name"></strong><span id="dash-co"></span></div>
+      </div>
+      <button class="btn-sm btn-admin" id="btn-admin-tab" style="display:none" data-action="panel-admin">🔐 Admin Panel</button>
+      <button class="btn-sm btn-signout" data-action="signout">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- Dashboard navigation tabs -->
+  <div class="dash-nav">
+    <button class="dnav on"      id="dn-apps"    data-action="panel-apps">📱 Applications</button>
+    <button class="dnav storage" id="dn-storage"  data-action="panel-storage">🗄 The Storage Facility</button>
+    <button class="dnav special" id="dn-manual"   data-action="panel-manual">📖 User Manual &amp; Help</button>
+    <button class="dnav admin-tab" id="dn-admin"  data-action="panel-admin" style="display:none">🔐 Admin Panel</button>
+  </div>
+
+  <!-- ── PANEL: APPLICATIONS ── -->
+  <div class="dpanel on" id="dp-apps">
+    <div class="sec-strip">
+      <span style="font-size:17px;">🔒</span>
+      <p><strong>Secure Session:</strong> Application source files are fully protected and not visible to portal users. Only the Pinnate Consulting portal administrator can access and review any application. All data is encrypted and stored privately.</p>
+    </div>
+    <div style="background:linear-gradient(135deg,#fff8e1,#fff3cd);border-left:5px solid #f59e0b;border-radius:10px;padding:14px 20px;margin-bottom:18px;display:flex;align-items:flex-start;gap:12px;">
+      <span style="font-size:20px;flex-shrink:0;">⚠️</span>
+      <p style="margin:0;font-size:13px;color:#7c4f00;line-height:1.6;"><strong>Important Notice:</strong> Do <strong>not</strong> refresh this page (F5) and do <strong>not</strong> click the browser Back arrow while using the portal. Doing so will log you out and you will need to sign in again.</p>
+    </div>
+    <div class="apps-hd"><h3>Your Applications</h3><p>Select any application to open it. Your cloud-saved data loads automatically.</p></div>
+    <div class="grid-8">
+      <div class="tile c1" data-action="launch-1"><div class="t-icon">📊</div><div><div class="t-name">Application 1</div><div class="t-sub">Name to be added</div></div><div class="t-foot"><span class="t-lbl">Open App</span><span class="t-arr">→</span></div></div>
+      <div class="tile c2" data-action="launch-2"><div class="t-icon">📋</div><div><div class="t-name">Application 2</div><div class="t-sub">Name to be added</div></div><div class="t-foot"><span class="t-lbl">Open App</span><span class="t-arr">→</span></div></div>
+      <div class="tile c3" data-action="launch-3"><div class="t-icon">📈</div><div><div class="t-name">Application 3</div><div class="t-sub">Name to be added</div></div><div class="t-foot"><span class="t-lbl">Open App</span><span class="t-arr">→</span></div></div>
+      <div class="tile c4" data-action="launch-4"><div class="t-icon">🗂️</div><div><div class="t-name">Application 4</div><div class="t-sub">Name to be added</div></div><div class="t-foot"><span class="t-lbl">Open App</span><span class="t-arr">→</span></div></div>
+      <div class="tile c5" data-action="launch-5"><div class="t-icon">📝</div><div><div class="t-name">Application 5</div><div class="t-sub">Name to be added</div></div><div class="t-foot"><span class="t-lbl">Open App</span><span class="t-arr">→</span></div></div>
+      <div class="tile c6" data-action="launch-6"><div class="t-icon">📌</div><div><div class="t-name">Application 6</div><div class="t-sub">Name to be added</div></div><div class="t-foot"><span class="t-lbl">Open App</span><span class="t-arr">→</span></div></div>
+      <div class="tile c7" data-action="launch-7"><div class="t-icon">🔍</div><div><div class="t-name">Application 7</div><div class="t-sub">Name to be added</div></div><div class="t-foot"><span class="t-lbl">Open App</span><span class="t-arr">→</span></div></div>
+      <div class="tile c8" data-action="launch-8"><div class="t-icon">⚙️</div><div><div class="t-name">Application 8</div><div class="t-sub">Name to be added</div></div><div class="t-foot"><span class="t-lbl">Open App</span><span class="t-arr">→</span></div></div>
+    </div>
+  </div>
+
+  <!-- ── PANEL: STORAGE FACILITY ── -->
+  <div class="dpanel" id="dp-storage">
+    <div class="storage-wrap">
+      <h3>🗄 The Storage Facility</h3>
+      <p class="">Every report, form, and output generated by your applications is automatically saved here, organized by company, application, and date. You can search, filter, restore, or print any previous work.</p>
+
+      <div class="storage-path-bar">
+        📂 <span>Pinnate Consulting Portal</span> › <span id="sf-company-path">Your Company</span> › <span id="sf-app-path">All Applications</span>
+      </div>
+
+      <!-- Folder shortcuts -->
+      <div class="sf-grid">
+        <div class="sf-folder" data-action="sf-1"><div class="sf-folder-icon">📊</div><div class="sf-folder-name">Application 1</div><div class="sf-folder-meta">0 saved reports</div></div>
+        <div class="sf-folder" data-action="sf-2"><div class="sf-folder-icon">📋</div><div class="sf-folder-name">Application 2</div><div class="sf-folder-meta">0 saved reports</div></div>
+        <div class="sf-folder" data-action="sf-3"><div class="sf-folder-icon">📈</div><div class="sf-folder-name">Application 3</div><div class="sf-folder-meta">0 saved reports</div></div>
+        <div class="sf-folder" data-action="sf-4"><div class="sf-folder-icon">🗂️</div><div class="sf-folder-name">Application 4</div><div class="sf-folder-meta">0 saved reports</div></div>
+        <div class="sf-folder" data-action="sf-5"><div class="sf-folder-icon">📝</div><div class="sf-folder-name">Application 5</div><div class="sf-folder-meta">0 saved reports</div></div>
+        <div class="sf-folder" data-action="sf-6"><div class="sf-folder-icon">📌</div><div class="sf-folder-name">Application 6</div><div class="sf-folder-meta">0 saved reports</div></div>
+      </div>
+
+      <!-- Report browser -->
+      <div class="sf-reports">
+        <div class="sf-reports-hd">
+          <h4>📄 All Saved Reports</h4>
+          <input class="sf-search" type="text" placeholder="Search by name, date, type…" id="sf-search-input"/>
+        </div>
+        <div class="sf-filter-row">
+          <button class="sf-filter-btn on" data-action="sfd-all">All Dates</button>
+          <button class="sf-filter-btn" data-action="sfd-today">Today</button>
+          <button class="sf-filter-btn" data-action="sfd-week">This Week</button>
+          <button class="sf-filter-btn" data-action="sfd-month">This Month</button>
+        </div>
+        <table class="sf-table" id="sf-table">
+          <thead><tr><th>Report Name</th><th>Application</th><th>Saved By</th><th>Date &amp; Time</th><th>Type</th><th>Actions</th></tr></thead>
+          <tbody id="sf-body">
+            <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--ink-l);font-style:italic;">No saved reports yet. Reports will appear here automatically each time you save work inside any application.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="manual-tip" style="margin-top:18px;">
+        <span style="font-size:16px;flex-shrink:0;">💡</span>
+        <div><strong>How saving works:</strong> When you complete work inside any application and click <em>"Save Report"</em>, it is automatically stored here under your company's folder. To restore a previous version, click <strong>Restore</strong>. To get a printed copy, click <strong>Print</strong>. Reports are identified by name, application, date, and time — you can sort or search by any of these.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANEL: USER MANUAL ── -->
+  <div class="dpanel" id="dp-manual">
+    <div class="manual-wrap">
+      <h3>📖 Portal User Manual &amp; Help Center</h3>
+      <p class="intro">Welcome to the complete guide for the Pinnate Consulting Client Portal. This manual covers everything you need to know — from signing in for the first time to finding, printing, and restoring your saved reports. If you ever feel lost, this is your starting point.</p>
+
+      <div class="manual-section">
+        <h4><span class="ms-icon">🔐</span> Getting Access to the Portal</h4>
+        <p>Access to this portal is <strong>not open to the public</strong>. It requires an active subscription with Pinnate Consulting LLC. Here is how to get started:</p>
+        <div class="step"><div class="step-num">1</div><div>Go to the portal login page and click the <strong>"Request Access"</strong> tab.</div></div>
+        <div class="step"><div class="step-num">2</div><div>Fill in your full name, company name, business email, phone number, and the reason you need access.</div></div>
+        <div class="step"><div class="step-num">3</div><div>Click <strong>"Submit Access Request."</strong> Your request is immediately sent to Pinnate Consulting's dedicated approver.</div></div>
+        <div class="step"><div class="step-num">4</div><div>The approver will verify your company's subscription status and respond <strong>same day to next business day</strong> with your User ID and password.</div></div>
+        <div class="step"><div class="step-num">5</div><div>Use your issued credentials to sign in on the <strong>"Sign In"</strong> tab.</div></div>
+        <div class="manual-tip"><span style="font-size:15px;flex-shrink:0;">💡</span><div>If you have not received credentials within one business day, contact Pinnate Consulting at <strong>gamal@pinnateconsulting.com</strong> or call <strong>+1 281 796 2525</strong>.</div></div>
+      </div>
+
+      <div class="manual-section">
+        <h4><span class="ms-icon">📱</span> The Applications Dashboard — What Each Button Does</h4>
+        <p>After signing in, you will land on the <strong>Applications Dashboard</strong>. You will see 8 application tiles. Each tile represents a dedicated business tool built specifically for your company's subscription with Pinnate Consulting.</p>
+        <ul>
+          <li><strong>Click any tile</strong> to open that application in your session. The application opens in the same window.</li>
+          <li>Each application is designed for a specific task (names will be updated as your subscription grows).</li>
+          <li>Your data inside each application is <strong>linked to your User ID</strong> — other users in your company cannot see your private inputs unless the application is designed for shared team use.</li>
+          <li>Application source files are <strong>fully hidden</strong> from all users — only the Pinnate Consulting administrator can access them.</li>
+        </ul>
+      </div>
+
+      <div class="manual-section">
+        <h4><span class="ms-icon">💾</span> Saving Your Work</h4>
+        <p>Every application has a <strong>"Save Report"</strong> button inside it. Here is exactly what happens when you save:</p>
+        <div class="step"><div class="step-num">1</div><div>You complete your work inside any application (entering data, running a report, or filling out a form).</div></div>
+        <div class="step"><div class="step-num">2</div><div>Click <strong>"Save Report"</strong> inside that application. You will be prompted to give the report a name (e.g., "Q1 Billing Report – April 2025").</div></div>
+        <div class="step"><div class="step-num">3</div><div>The report is <strong>automatically stored</strong> in The Storage Facility under your company's folder, tagged with the application name, your User ID, and the exact date and time.</div></div>
+        <div class="step"><div class="step-num">4</div><div>A confirmation message appears: <em>"Report saved to Storage Facility."</em></div></div>
+        <div class="manual-tip"><span style="font-size:15px;flex-shrink:0;">💡</span><div>You do not need to choose a folder or file location — it is handled automatically. Think of it as saving to a cloud folder that is always organized for you.</div></div>
+      </div>
+
+      <div class="manual-section">
+        <h4><span class="ms-icon">🗄</span> The Storage Facility — Finding &amp; Restoring Reports</h4>
+        <p>The <strong>Storage Facility</strong> (accessible from the top navigation bar) is the central place where all your saved reports live. Think of it as your cloud filing cabinet — organized exactly like folders and sub-folders on your computer, but always available from anywhere.</p>
+        <ul>
+          <li><strong>Folders</strong> at the top represent each Application. Click a folder to filter the report list to only that application.</li>
+          <li>The <strong>address bar</strong> (the green path bar) always shows you exactly where you are: <em>Portal › Your Company › Application Name</em>.</li>
+          <li><strong>Search:</strong> Type any word in the search box — report name, date, or type — to find a specific report instantly.</li>
+          <li><strong>Filter by date:</strong> Use the date filter buttons (Today / This Week / This Month / All Dates) to narrow results.</li>
+          <li><strong>Restore a previous report:</strong> Click the <strong>Restore</strong> button next to any report to reload it inside its original application, exactly as it was when saved.</li>
+          <li><strong>Print a report:</strong> Click the <strong>Print</strong> button to open the print dialog for that report — you can print to paper or save as a PDF.</li>
+        </ul>
+        <div class="manual-tip"><span style="font-size:15px;flex-shrink:0;">💡</span><div>Storage is organized by your company name automatically. You will never mix your data with another company's reports — each subscriber has a private, isolated storage space.</div></div>
+      </div>
+
+      <div class="manual-section">
+        <h4><span class="ms-icon">🖨</span> Viewing &amp; Printing Previous Reports</h4>
+        <div class="step"><div class="step-num">1</div><div>Go to <strong>The Storage Facility</strong> from the navigation bar at the top.</div></div>
+        <div class="step"><div class="step-num">2</div><div>Find the report you want — use the search box or date filters to locate it quickly.</div></div>
+        <div class="step"><div class="step-num">3</div><div>Click <strong>Restore</strong> to re-open the report inside the application, or click <strong>Print</strong> to print it directly without reopening.</div></div>
+        <div class="step"><div class="step-num">4</div><div>In the print dialog, choose your printer — or select <em>"Save as PDF"</em> to keep a digital copy on your computer.</div></div>
+      </div>
+
+      <div class="manual-section">
+        <h4><span class="ms-icon">🔑</span> Your Account — Password &amp; Security Tips</h4>
+        <ul>
+          <li>Your <strong>User ID</strong> was assigned by Pinnate Consulting when your access was approved — it cannot be changed by you.</li>
+          <li>Your <strong>password</strong> was set by the administrator when your account was created. If you need to reset it, contact <a href="mailto:gamal@pinnateconsulting.com" style="color:var(--pine);text-decoration:none;font-weight:500;">gamal@pinnateconsulting.com</a>.</li>
+          <li>Never share your credentials with anyone — each user should have their own account.</li>
+          <li>Always click <strong>Sign Out</strong> when you finish your session, especially on shared computers.</li>
+        </ul>
+      </div>
+
+      <div class="manual-section">
+        <h4><span class="ms-icon">🆘</span> Getting Help</h4>
+        <p>If you encounter any issue, have a question, or need assistance, contact Pinnate Consulting directly:</p>
+        <ul>
+          <li>📧 Email: <a href="mailto:gamal@pinnateconsulting.com" style="color:var(--pine);text-decoration:none;font-weight:500;">gamal@pinnateconsulting.com</a></li>
+          <li>📞 Phone: <a href="tel:+12817962525" style="color:var(--pine);text-decoration:none;font-weight:500;">+1 281 796 2525</a></li>
+          <li>🌐 Website: <a href="https://www.pinnateconsulting.com" target="_blank" style="color:var(--pine);text-decoration:none;font-weight:500;">www.pinnateconsulting.com</a></li>
+        </ul>
+        <div class="manual-tip"><span style="font-size:15px;flex-shrink:0;">💡</span><div>Response time for support requests is typically same day to next business day — the same fast, direct service you received when your account was first approved.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANEL: ADMIN ── -->
+  <div class="dpanel" id="dp-admin">
+    <div class="admin-wrap">
+      <h3>🔐 Administrator Panel — Access Request Review</h3>
+      <p class="admin-intro">This panel is accessible exclusively by <strong>Gamal</strong>, owner and sole administrator of the Pinnate Consulting LLC Client Portal. As administrator, you have full authority to approve or deny any access request, activate or deactivate any user account, and review all applications. Assign a User ID and temporary password to approve — or provide a reason to deny. The applicant is notified by email automatically.</p>
+
+      <div class="admin-notice"><span style="font-size:16px;flex-shrink:0;">⚠</span><div><strong>Administrator-only view — accessible by Gamal only.</strong> You hold full and exclusive authority over all portal access decisions. Once you activate a user, add their credentials to the USERS object in this HTML file. A notification email is sent to the applicant automatically when you click either action button.</div></div>
+
+      <div style="background:linear-gradient(135deg,#1f4a2c,#1a5c70);border-radius:14px;padding:20px 24px;margin-bottom:22px;border:1px solid rgba(255,255,255,0.15);box-shadow:0 4px 20px rgba(14,31,22,0.25);">
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:14px;">🔐 Your Administrator Login Credentials</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+          <div style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:14px 18px;">
+            <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Admin User ID</div>
+            <div style="font-size:22px;font-weight:700;color:#9ee8c0;font-family:monospace;letter-spacing:1px;">gamal</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:14px 18px;">
+            <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Admin Password</div>
+            <div style="font-size:18px;font-weight:700;color:#9ee8c0;font-family:monospace;letter-spacing:1px;">Pinnate@Admin2025!</div>
+          </div>
+        </div>
+        <div style="font-size:11.5px;color:rgba(255,255,255,0.55);line-height:1.65;">
+          <strong style="color:rgba(255,255,255,0.8);">Full administrator authority:</strong> You are the sole owner of this portal. 
+          You control all access approvals, user activations, denials, and application management. 
+          To change your password, edit the <code style="background:rgba(255,255,255,0.12);padding:2px 6px;border-radius:4px;font-size:11px;">USERS</code> object in the HTML file and replace <code style="background:rgba(255,255,255,0.12);padding:2px 6px;border-radius:4px;font-size:11px;">Pinnate@Admin2025!</code> with your new password.
+        </div>
+      </div>
+
+      <div class="howto-admin">
+        <strong>How the approval workflow works:</strong><br>
+        1. A person submits a request via the "Request Access" tab — you receive an email at <strong>gamal@pinnateconsulting.com</strong> (your address as portal owner).<br>
+        2. Their request appears here in the Admin Panel as <span style="background:#fff8e8;border:1px solid #f0d890;color:#8a6010;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Pending</span>.<br>
+        3. You review their details, assign a User ID and temporary password, add an optional comment, then click <strong style="color:var(--pine)">☑ Activate User</strong> or <strong style="color:var(--rose)">✗ Deny Access</strong>.<br>
+        4. The status updates and a reply email is sent to the applicant with their result and, if approved, their login credentials.
+      </div>
+
+      <!-- ── USER MANAGEMENT PANEL ── -->
+      <div id="active-users-box" style="background:#f0faf4;border:1.5px solid var(--pine);border-radius:14px;padding:20px 24px;margin-bottom:22px;">
+
+        <!-- Header row -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:4px;">
+          <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--pine-d);">👥 User Management</div>
+          <div id="user-count-badge" style="background:#d8f0e0;color:#1f4a2c;padding:3px 14px;border-radius:20px;font-size:11.5px;font-weight:700;"></div>
+        </div>
+        <div style="font-size:11.5px;color:var(--ink-l);margin-bottom:14px;">Manage all portal users. Suspend access instantly to block login, restore it at any time, or permanently remove a user. The admin account is protected and cannot be modified.</div>
+
+        <!-- Search + filter bar -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+          <input type="text" id="um-search" placeholder="🔍 Search by name or User ID…"
+            style="flex:1;min-width:180px;padding:8px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12.5px;outline:none;background:white;"/>
+          <button type="button" id="umf-all"
+            style="padding:7px 16px;border-radius:8px;border:1.5px solid var(--pine);background:var(--pine);color:white;font-size:11.5px;font-weight:700;cursor:pointer;">All</button>
+          <button type="button" id="umf-active"
+            style="padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:white;color:var(--ink-m);font-size:11.5px;font-weight:600;cursor:pointer;">Active</button>
+          <button type="button" id="umf-suspended"
+            style="padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:white;color:var(--ink-m);font-size:11.5px;font-weight:600;cursor:pointer;">Suspended</button>
+        </div>
+
+        <!-- Table -->
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:12.5px;" id="um-table">
+            <thead>
+              <tr style="background:linear-gradient(90deg,#d8f0e0,#d0eef6);">
+                <th style="padding:9px 12px;text-align:left;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink-m);white-space:nowrap;">Full Name</th>
+                <th style="padding:9px 12px;text-align:left;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink-m);white-space:nowrap;">User ID</th>
+                <th style="padding:9px 12px;text-align:left;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink-m);white-space:nowrap;">Role</th>
+                <th style="padding:9px 12px;text-align:left;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink-m);white-space:nowrap;">Status</th>
+                <th style="padding:9px 12px;text-align:left;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink-m);white-space:nowrap;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Legend -->
+        <div style="display:flex;gap:18px;margin-top:12px;flex-wrap:wrap;">
+          <span style="font-size:11px;color:var(--ink-l);">🟢 Active — can log in</span>
+          <span style="font-size:11px;color:var(--ink-l);">🔴 Suspended — blocked until restored</span>
+          <span style="font-size:11px;color:var(--ink-l);">🛡 Admin — protected, cannot be changed</span>
+        </div>
+      </div>
+
+      <!-- ── ADD NEW REQUEST FORM (Gamal fills this from the email he received) ── -->
+      <div id="add-req-box" style="background:linear-gradient(135deg,#eaf6f0,#e0f4f8);border:2px solid var(--pine);border-radius:16px;padding:24px 26px;margin-bottom:26px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--pine-d);margin-bottom:3px;">➕ Add Incoming Request</div>
+            <div style="font-size:12px;color:var(--ink-l);">When you receive a request email, fill in the details here and click Add — the card will appear below ready for your decision.</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-m);margin-bottom:5px;">Full Name *</label>
+            <input type="text" id="new-name" placeholder="e.g. John Smith" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:white;outline:none;"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-m);margin-bottom:5px;">Company *</label>
+            <input type="text" id="new-co" placeholder="e.g. Acme Corp" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:white;outline:none;"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-m);margin-bottom:5px;">Email *</label>
+            <input type="text" id="new-em" placeholder="e.g. john@acme.com" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:white;outline:none;"/>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-m);margin-bottom:5px;">Phone</label>
+            <input type="text" id="new-ph" placeholder="e.g. +1 713 555 0100" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:white;outline:none;"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-m);margin-bottom:5px;">Reason for Access</label>
+            <input type="text" id="new-rs" placeholder="e.g. Monthly billing reports" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:white;outline:none;"/>
+          </div>
+        </div>
+        <div id="new-req-err" style="display:none;background:var(--rose-pale);border:1px solid #f0c0c8;color:var(--rose);border-radius:8px;padding:9px 14px;font-size:12px;margin-bottom:12px;">⚠ Please fill in Name, Company, and Email before adding.</div>
+        <button type="button" style="padding:11px 28px;background:linear-gradient(135deg,#1f4a2c,#2d6a3f);border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:white;cursor:pointer;box-shadow:0 4px 14px rgba(45,106,63,.35);letter-spacing:.3px;" data-action="add-request">➕ Add to Request List</button>
+      </div>
+
+      <!-- Sample pending request cards -->
+
+      <div id="request-list">
+
+        <div class="request-card" id="req-card-1">
+          <div class="rc-top">
+            <div class="rc-person">
+              <strong>Maria Johnson</strong>
+              <span>Submitted: May 1, 2025 · 9:14 AM</span>
+            </div>
+            <span class="rc-badge badge-pending" id="badge-1">⏳ Pending Review</span>
+          </div>
+          <div class="rc-details">
+            <div class="rc-field"><label>Company</label><p>ABC Healthcare Corp.</p></div>
+            <div class="rc-field"><label>Business Email</label><p>maria.j@abchealthcare.com</p></div>
+            <div class="rc-field"><label>Phone</label><p>+1 713 555 0198</p></div>
+            <div class="rc-field"><label>Reason for Access</label><p>Monthly billing reports for operations team</p></div>
+            <div class="rc-field"><label>Subscription Status</label><p style="color:var(--pine);font-weight:600;">✓ Active — verify in records</p></div>
+            <div class="rc-field"><label>Request ID</label><p>#REQ-2025-001</p></div>
+          </div>
+          <div class="rc-actions">
+            <div class="rc-comment" style="flex:2">
+              <label>Assign User ID &amp; Temporary Password</label>
+              <div class="userid-assign" style="margin-bottom:10px">
+                <label>User ID:</label>
+                <input type="text" id="uid-1" placeholder="e.g. mjohnson" />
+                <label>Temp Password:</label>
+                <input type="text" id="upw-1" class="pw-in" placeholder="e.g. Temp@2025!" />
+              </div>
+              <label>Comment / Message to Applicant (optional)</label>
+              <textarea id="comment-1" placeholder="e.g. Welcome! Your account has been activated. Please change your password upon first login. Contact us at any time for support."></textarea>
+            </div>
+            <div class="rc-buttons">
+              <button class="btn-approve" data-action="approve-1" data-num="1" data-name="Maria Johnson" data-em="maria.j@abchealthcare.com">☑ Activate User</button>
+              <button class="btn-deny"    data-action="deny-1"    data-num="1" data-name="Maria Johnson" data-em="maria.j@abchealthcare.com">✗ Deny Access</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="req-placeholder" style="text-align:center;padding:24px;font-size:12.5px;color:var(--ink-l);background:rgba(255,255,255,.7);border:1px dashed var(--border);border-radius:14px;margin-top:4px;">
+          Additional access requests will appear here as they are submitted through the portal.
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-foot">
+    <p>© 2025 Pinnate Consulting LLC · Confidential — Unauthorized access is strictly prohibited.</p>
+    <p>Support: <a href="mailto:gamal@pinnateconsulting.com">gamal@pinnateconsulting.com</a> · <a href="tel:+12817962525">+1 281 796 2525</a></p>
+  </div>
+
+
+  <!-- ── CHANGE PASSWORD MODAL ── -->
+  <div id="pw-modal-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:18px;padding:36px 40px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.35);">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#1f4a2c;margin-bottom:6px;">🔑 Change Your Password</div>
+      <p style="font-size:13px;color:#6b7a6e;margin-bottom:22px;">You are using a temporary password. Please set a new personal password to secure your account.</p>
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:#6b7a6e;margin-bottom:5px;">New Password</label>
+        <input type="password" id="pw-new" placeholder="Enter new password" style="width:100%;padding:11px 14px;border:1.5px solid #c8dbc8;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;box-sizing:border-box;"/>
+      </div>
+      <div style="margin-bottom:22px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:#6b7a6e;margin-bottom:5px;">Confirm New Password</label>
+        <input type="password" id="pw-confirm" placeholder="Repeat new password" style="width:100%;padding:11px 14px;border:1.5px solid #c8dbc8;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;box-sizing:border-box;"/>
+      </div>
+      <div id="pw-modal-err" style="display:none;background:#fff0f0;border:1px solid #f5c6c6;color:#c0392b;border-radius:8px;padding:9px 14px;font-size:12.5px;margin-bottom:14px;"></div>
+      <div style="display:flex;gap:12px;">
+        <button type="button" id="pw-save-btn" style="flex:1;padding:12px;background:linear-gradient(135deg,#1f4a2c,#2d6a3f);border:none;border-radius:10px;color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Save New Password</button>
+        <button type="button" id="pw-skip-btn" style="padding:12px 18px;background:#f2f4f2;border:none;border-radius:10px;color:#6b7a6e;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Skip for now</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ SCRIPT ════════════════════════════════════════ -->
+<!-- ═══ SCRIPT ════════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ════════════════════════════════════════════════════════════════════════
+//  CONFIGURATION — paste your Azure Function URL here once deployed
+// ════════════════════════════════════════════════════════════════════════
+var API_URL = 'https://pinnate-portal-api-gnekhkf6ddf0a9ag.eastus2-01.azurewebsites.net/api/PinnateAPI';
+
+// ════════════════════════════════════════════════════════════════════════
+//  RUNTIME STATE
+// ════════════════════════════════════════════════════════════════════════
+var currentUser = null;
+var USERS       = {};
+var _loginLock  = false;
+
+// ════════════════════════════════════════════════════════════════════════
+//  API HELPER — all calls go through here
+// ════════════════════════════════════════════════════════════════════════
+function callAPI(payload, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', API_URL, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    try {
+      var r = JSON.parse(xhr.responseText);
+      callback(null, r);
+    } catch(e) {
+      callback('Parse error', null);
+    }
+  };
+  xhr.onerror = function() { callback('Network error', null); };
+  xhr.send(JSON.stringify(payload));
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  AUTH
+// ════════════════════════════════════════════════════════════════════════
+function switchTab(t) {
+  ['in','req'].forEach(function(k) {
+    document.getElementById('tab-'+k).classList.toggle('on', k===t);
+    document.getElementById('fsec-'+k).classList.toggle('on', k===t);
+  });
+  clearAlerts();
+}
+
+function clearAlerts() {
+  ['err-in','err-req','ok-req'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  });
+}
+
+function showAlert(id, msg) {
+  var t = document.getElementById(id+'-txt');
+  if (t && msg) t.textContent = msg;
+  var el = document.getElementById(id);
+  if (el) el.classList.add('show');
+}
+
+function validateAndLogin(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  if (_loginLock) return false;
+  _loginLock = true;
+  clearAlerts();
+
+  var rawId = document.getElementById('in-id').value || '';
+  var rawPw = document.getElementById('in-pw').value || '';
+  var uid   = rawId.replace(/\s/g,'').toLowerCase();
+  var pw    = rawPw.trim();
+
+  if (!uid || !pw) {
+    showAlert('err-in', 'Please enter both your User ID and password.');
+    _loginLock = false;
+    return false;
+  }
+
+  var btn = document.getElementById('btn-signin');
+  btn.disabled = true;
+  btn.textContent = 'Verifying…';
+
+  // Check if API is configured
+  if (!API_URL || API_URL.indexOf('PASTE') === 0) {
+    // Fallback: admin-only local check for setup/testing
+    if (uid === 'gamal' && pw === 'Pinnate@Admin2025!') {
+      btn.disabled = false;
+      btn.textContent = 'Sign In to Portal';
+      _loginLock = false;
+      currentUser = { userid:'gamal', name:'Gamal', company:'Pinnate Consulting LLC', role:'admin' };
+      loadDashboard(currentUser);
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Sign In to Portal';
+      _loginLock = false;
+      showAlert('err-in', 'Portal API not configured yet. Please complete the Azure setup.');
+    }
+    return false;
+  }
+
+  callAPI({ action:'login', userid:uid, password:pw }, function(err, resp) {
+    btn.disabled = false;
+    btn.textContent = 'Sign In to Portal';
+    _loginLock = false;
+    if (err || !resp) {
+      showAlert('err-in', 'Unable to reach the server. Check your internet connection and try again.');
+      return;
+    }
+    if (resp.status === 'ok' && resp.user) {
+      currentUser = resp.user;
+      loadDashboard(currentUser);
+    } else {
+      var msg = resp.message || 'Invalid credentials';
+      if (msg.indexOf('suspended') >= 0) {
+        showAlert('err-in', 'Your account has been suspended. Contact gamal@pinnateconsulting.com for assistance.');
+      } else {
+        showAlert('err-in', 'Incorrect User ID or password. Contact gamal@pinnateconsulting.com or call +1 281 796 2525.');
+      }
+    }
+  });
+  return false;
+}
+
+function loadDashboard(user) {
+  document.getElementById('dash-ava').textContent  = (user.name||'?').charAt(0).toUpperCase();
+  document.getElementById('dash-name').textContent = user.name;
+  document.getElementById('dash-co').textContent   = user.company;
+  document.getElementById('sf-company-path').textContent = user.company;
+  var h = new Date().getHours();
+  var g = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('dash-greet').textContent = g + ', ' + user.name + '. Welcome to your Performance Dashboard.';
+  var isAdmin = user.role === 'admin';
+  document.getElementById('btn-admin-tab').style.display = isAdmin ? 'inline-block' : 'none';
+  document.getElementById('dn-admin').style.display      = isAdmin ? 'inline-block' : 'none';
+  document.getElementById('auth-gate').checked = true;
+  showDPanel('apps');
+  window.scrollTo(0,0);
+}
+
+function doSignOut() {
+  document.getElementById('in-id').value = '';
+  document.getElementById('in-pw').value = '';
+  document.getElementById('auth-gate').checked = false;
+  switchTab('in');
+  currentUser = null;
+  USERS = {};
+  window.scrollTo(0,0);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  DASHBOARD PANELS
+// ════════════════════════════════════════════════════════════════════════
+function showDPanel(p) {
+  ['apps','storage','manual','admin'].forEach(function(k) {
+    document.getElementById('dp-'+k).classList.toggle('on', k===p);
+    var dn = document.getElementById('dn-'+k);
+    if (dn) dn.classList.toggle('on', k===p);
+  });
+}
+
+function showAdminPanel() {
+  showDPanel('admin');
+  loadUsersFromAPI();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  ADMIN — LOAD USERS FROM AZURE
+// ════════════════════════════════════════════════════════════════════════
+function loadUsersFromAPI() {
+  var tbody = document.getElementById('users-tbody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="padding:20px;text-align:center;color:var(--ink-l);font-size:13px;">Loading users…</td></tr>';
+
+  if (!API_URL || API_URL.indexOf('PASTE') === 0) {
+    USERS = {};
+    refreshUsersTable();
+    return;
+  }
+
+  callAPI({ action:'getUsers' }, function(err, resp) {
+    USERS = {};
+    if (!err && resp && resp.users) {
+      resp.users.forEach(function(u) { USERS[u.userid] = u; });
+    }
+    refreshUsersTable();
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  ADMIN — APPROVE REQUEST
+//  Writes user to Azure Cosmos DB via Function API.
+//  No file. No download. No attachment. Ever.
+// ════════════════════════════════════════════════════════════════════════
+function approveRequest(num, name, email) {
+  var uid     = (document.getElementById('uid-'+num).value || '').trim().toLowerCase();
+  var upw     = (document.getElementById('upw-'+num).value || '').trim();
+  var comment = (document.getElementById('comment-'+num).value || '').trim();
+  var card    = document.getElementById('req-card-'+num);
+
+  if (!uid || !upw) {
+    alert('Please assign both a User ID and a temporary password before activating.');
+    return;
+  }
+
+  // Get company from card details
+  var co = '';
+  var fields = card.querySelectorAll('.rc-field p');
+  if (fields.length) co = fields[0].textContent.trim();
+
+  var approveBtn = card.querySelector('.btn-approve');
+  approveBtn.disabled = true;
+  approveBtn.textContent = '⏳ Activating…';
+
+  var payload = { action:'addUser', userid:uid, password:upw, name:name, company:co, role:'user' };
+
+  function onSuccess() {
+    // Update in-memory
+    USERS[uid] = { userid:uid, password:upw, name:name, company:co, role:'user', suspended:false };
+
+    // Badge
+    document.getElementById('badge-'+num).className = 'rc-badge badge-approved';
+    document.getElementById('badge-'+num).textContent = '✓ Activated — ' + uid;
+    Array.from(card.querySelectorAll('.btn-approve,.btn-deny')).forEach(function(b){ b.disabled=true; b.style.opacity='.4'; });
+
+    // Build activation email
+    var subject = encodeURIComponent('✅ Your Pinnate Consulting Portal Access Has Been Activated');
+    var body =
+      'Dear ' + name + ',\n\n' +
+      'Your access to the Pinnate Consulting Client Portal has been APPROVED and activated.\n\n' +
+      '──────────────────────────────────────────\n' +
+      'Your Login Credentials:\n' +
+      '  User ID   : ' + uid + '\n' +
+      '  Password  : ' + upw + '\n' +
+      '──────────────────────────────────────────\n\n' +
+      'HOW TO ACCESS THE PORTAL:\n' +
+      '  Open your browser and go to: portal.pinnateconsulting.com\n' +
+      '  Enter your User ID and Password above and click Sign In.\n\n' +
+      '──────────────────────────────────────────\n\n' +
+      (comment ? 'Message from Pinnate Consulting:\n' + comment + '\n\n' : '') +
+      'Questions? Email gamal@pinnateconsulting.com or call +1 281 796 2525.\n\n' +
+      'Welcome aboard!\nPinnate Consulting LLC';
+
+    var mailtoHref = 'mailto:' + email + '?subject=' + subject + '&body=' + encodeURIComponent(body);
+
+    // Confirmation banner
+    var banner = document.createElement('div');
+    banner.style.cssText = 'margin-top:14px;padding:18px 22px;background:#e0f5e8;border:2px solid #a8d8b8;border-radius:12px;font-size:13px;color:#1e5a38;line-height:2;';
+    banner.innerHTML =
+      '<strong style="font-size:15px;">✅ ' + name + ' has been activated.</strong><br>' +
+      'User ID: <strong>' + uid + '</strong> &nbsp;·&nbsp; Password: <strong>' + upw + '</strong><br>' +
+      '✅ <strong>Credentials saved to Azure database automatically.</strong><br>' +
+      name + ' can log in right now at <strong>portal.pinnateconsulting.com</strong> — no file needed.<br><br>' +
+      '<a href="' + mailtoHref + '" target="_blank" style="display:inline-block;padding:10px 22px;background:#1a6b7a;color:white;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;">📧 Send Activation Email to ' + name + '</a><br>' +
+      '<span style="font-size:11.5px;margin-top:4px;display:block;">No attachment needed — the user just opens the portal URL in any browser.</span>';
+    card.appendChild(banner);
+    card.scrollIntoView({ behavior:'smooth', block:'center' });
+    refreshUsersTable();
+  }
+
+  function onFail(message) {
+    approveBtn.disabled = false;
+    approveBtn.textContent = '☑ Activate User';
+    alert('⚠ Could not save to Azure database: ' + (message || 'Unknown error') + '\n\nPlease try again or add the user manually in the Azure Portal.');
+  }
+
+  if (!API_URL || API_URL.indexOf('PASTE') === 0) {
+    // API not configured — still show success locally for testing
+    onSuccess();
+    return;
+  }
+
+  callAPI(payload, function(err, resp) {
+    if (!err && resp && resp.status === 'ok') {
+      onSuccess();
+    } else {
+      onFail(resp ? resp.message : err);
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  ADMIN — USER MANAGEMENT TABLE
+// ════════════════════════════════════════════════════════════════════════
+function refreshUsersTable() {
+  var tbody  = document.getElementById('users-tbody');
+  if (!tbody) return;
+  var search = ((document.getElementById('um-search')||{}).value||'').toLowerCase();
+  var filter = window._umFilter || 'all';
+  tbody.innerHTML = '';
+  var total = 0, activeCount = 0, suspendedCount = 0;
+
+  // Admin row always first
+  var adminRow = buildUserRow('gamal', { name:'Gamal', company:'Pinnate Consulting LLC', role:'admin', suspended:false }, false);
+  tbody.appendChild(adminRow);
+  total++; activeCount++;
+
+  Object.keys(USERS).forEach(function(uid) {
+    var u = USERS[uid];
+    if (uid === 'gamal') return;
+    var isSusp = u.suspended === true;
+    total++; if (isSusp) suspendedCount++; else activeCount++;
+    if (filter === 'active'    &&  isSusp) return;
+    if (filter === 'suspended' && !isSusp) return;
+    if (search && !(u.name||'').toLowerCase().includes(search) && !uid.toLowerCase().includes(search)) return;
+    tbody.appendChild(buildUserRow(uid, u, true));
+  });
+
+  var badge = document.getElementById('user-count-badge');
+  if (badge) badge.textContent = activeCount + ' Active · ' + suspendedCount + ' Suspended · ' + total + ' Total';
+
+  ['umf-all','umf-active','umf-suspended'].forEach(function(id, i) {
+    var b = document.getElementById(id); if (!b) return;
+    var f = ['all','active','suspended'][i];
+    b.style.background  = f===filter ? 'var(--pine)' : 'white';
+    b.style.color       = f===filter ? 'white' : 'var(--ink-m)';
+    b.style.borderColor = f===filter ? 'var(--pine)' : 'var(--border)';
+  });
+}
+
+function buildUserRow(uid, u, canEdit) {
+  var isAdmin = u.role === 'admin';
+  var isSusp  = !isAdmin && u.suspended === true;
+  var tr = document.createElement('tr');
+  tr.style.cssText = 'border-bottom:1px solid var(--bs);background:' + (isSusp ? '#fff8f8' : 'white') + ';';
+  function td(html, css) {
+    var el = document.createElement('td');
+    el.style.cssText = 'padding:10px 12px;' + (css||'');
+    el.innerHTML = html;
+    return el;
+  }
+  tr.appendChild(td('<span style="font-weight:600;color:' + (isSusp?'#bbb':'var(--ink)') + ';">' + (u.name||uid) + '</span>'));
+  tr.appendChild(td('<span style="font-family:monospace;font-weight:700;color:' + (isSusp?'#ccc':'var(--pine-d)') + ';">' + uid + '</span>'));
+  tr.appendChild(td('<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:' + (isAdmin?'#faebd7':'#d8f0e0') + ';color:' + (isAdmin?'#8a4010':'#1f4a2c') + ';">' + (isAdmin?'🛡 Admin':'👤 User') + '</span>'));
+  tr.appendChild(td(isAdmin
+    ? '<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#f0f0f0;color:#999;">🛡 Protected</span>'
+    : isSusp
+      ? '<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#fce8e8;color:#c0392b;">🔴 Suspended</span>'
+      : '<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#d8f0e0;color:#1f4a2c;">🟢 Active</span>'
+  ));
+
+  var actTd = document.createElement('td');
+  actTd.style.cssText = 'padding:10px 12px;white-space:nowrap;';
+  if (!canEdit || isAdmin) {
+    actTd.innerHTML = '<span style="font-size:11.5px;color:#bbb;">—</span>';
+  } else {
+    var btnT = document.createElement('button');
+    btnT.type = 'button';
+    if (isSusp) {
+      btnT.textContent = '✅ Restore';
+      btnT.style.cssText = 'padding:5px 13px;background:#d8f0e0;border:1.5px solid var(--pine);border-radius:7px;color:#1f4a2c;font-size:11.5px;font-weight:700;cursor:pointer;margin-right:6px;';
+      btnT.addEventListener('mousedown', (function(id){ return function(){ updateUser(id, 'suspended', false); }; })(uid));
+    } else {
+      btnT.textContent = '⏸ Suspend';
+      btnT.style.cssText = 'padding:5px 13px;background:#fff0f0;border:1.5px solid #e0a0a8;border-radius:7px;color:#c0392b;font-size:11.5px;font-weight:700;cursor:pointer;margin-right:6px;';
+      btnT.addEventListener('mousedown', (function(id){ return function(){ updateUser(id, 'suspended', true); }; })(uid));
+    }
+    var btnR = document.createElement('button');
+    btnR.type = 'button'; btnR.textContent = '🗑 Remove';
+    btnR.style.cssText = 'padding:5px 13px;background:#fff;border:1.5px solid #ccc;border-radius:7px;color:#888;font-size:11.5px;font-weight:700;cursor:pointer;';
+    btnR.addEventListener('mousedown', (function(id){ return function(){ removeUser(id); }; })(uid));
+    actTd.appendChild(btnT); actTd.appendChild(btnR);
+  }
+  tr.appendChild(actTd);
+  return tr;
+}
+
+function updateUser(uid, field, value) {
+  var u = USERS[uid]; if (!u) return;
+  var label = value ? 'Suspend' : 'Restore';
+  if (!confirm(label + ' access for ' + (u.name||uid) + '?')) return;
+  callAPI({ action:'updateUser', userid:uid, field:field, value:String(value) }, function(err, resp) {
+    if (!err && resp && resp.status === 'ok') {
+      USERS[uid][field] = value;
+      refreshUsersTable();
+    } else {
+      alert('⚠ Could not update user. Please try again.');
+    }
+  });
+}
+
+function removeUser(uid) {
+  var u = USERS[uid]; if (!u) return;
+  if (!confirm('Permanently remove ' + (u.name||uid) + '?\nThis cannot be undone.')) return;
+  callAPI({ action:'removeUser', userid:uid }, function(err, resp) {
+    if (!err && resp && resp.status === 'ok') {
+      delete USERS[uid];
+      refreshUsersTable();
+    } else {
+      alert('⚠ Could not remove user. Please try again.');
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  ADMIN — ADD REQUEST CARD
+// ════════════════════════════════════════════════════════════════════════
+var reqCount = 1;
+function addRequestCard() {
+  var nm  = (document.getElementById('new-name').value||'').trim();
+  var co  = (document.getElementById('new-co').value||'').trim();
+  var em  = (document.getElementById('new-em').value||'').trim();
+  var ph  = (document.getElementById('new-ph').value||'').trim() || 'Not provided';
+  var rs  = (document.getElementById('new-rs').value||'').trim() || 'Not provided';
+  var err = document.getElementById('new-req-err');
+  if (!nm||!co||!em) { err.style.display='block'; return; }
+  err.style.display='none';
+  reqCount++;
+  var n   = reqCount;
+  var now = new Date();
+  var ds  = now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) + ' · ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  var rid = '#REQ-' + now.getFullYear() + '-' + ('00'+n).slice(-3);
+
+  var card = document.createElement('div');
+  card.className = 'request-card'; card.id = 'req-card-'+n;
+  var top = document.createElement('div'); top.className = 'rc-top';
+  top.innerHTML = '<div class="rc-person"><strong>'+nm+'</strong><span>Submitted: '+ds+'</span></div><span class="rc-badge badge-pending" id="badge-'+n+'">⏳ Pending Review</span>';
+  card.appendChild(top);
+  var det = document.createElement('div'); det.className = 'rc-details';
+  det.innerHTML =
+    '<div class="rc-field"><label>Company</label><p>'+co+'</p></div>'+
+    '<div class="rc-field"><label>Business Email</label><p>'+em+'</p></div>'+
+    '<div class="rc-field"><label>Phone</label><p>'+ph+'</p></div>'+
+    '<div class="rc-field"><label>Reason</label><p>'+rs+'</p></div>'+
+    '<div class="rc-field"><label>Request ID</label><p>'+rid+'</p></div>';
+  card.appendChild(det);
+  var act = document.createElement('div'); act.className = 'rc-actions';
+  var cmt = document.createElement('div'); cmt.className='rc-comment'; cmt.style.flex='2';
+  cmt.innerHTML =
+    '<label>Assign User ID &amp; Temp Password</label>'+
+    '<div class="userid-assign" style="margin-bottom:10px">'+
+    '<label>User ID:</label><input type="text" id="uid-'+n+'" placeholder="e.g. jsmith"/>'+
+    '<label>Temp Password:</label><input type="text" id="upw-'+n+'" class="pw-in" placeholder="e.g. Temp@2025!"/>'+
+    '</div><label>Comment to Applicant (optional)</label>'+
+    '<textarea id="comment-'+n+'" placeholder="e.g. Welcome! Please change your password on first login."></textarea>';
+  act.appendChild(cmt);
+  var btns = document.createElement('div'); btns.className = 'rc-buttons';
+  var bapp = document.createElement('button'); bapp.className='btn-approve'; bapp.textContent='☑ Activate User';
+  bapp.onmousedown = function(){ approveRequest(n, nm, em); };
+  var bdny = document.createElement('button'); bdny.className='btn-deny'; bdny.textContent='✗ Deny Access';
+  bdny.onmousedown = function(){ denyRequest(n, nm, em); };
+  btns.appendChild(bapp); btns.appendChild(bdny); act.appendChild(btns); card.appendChild(act);
+  var list = document.getElementById('request-list');
+  var ph2  = document.getElementById('req-placeholder');
+  list.insertBefore(card, ph2);
+  ['new-name','new-co','new-em','new-ph','new-rs'].forEach(function(id){ document.getElementById(id).value=''; });
+  card.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  REQUEST ACCESS
+// ════════════════════════════════════════════════════════════════════════
+function doRequest() {
+  clearAlerts();
+  var fn = (document.getElementById('req-fn').value||'').trim();
+  var ln = (document.getElementById('req-ln').value||'').trim();
+  var co = (document.getElementById('req-co').value||'').trim();
+  var em = (document.getElementById('req-em').value||'').trim();
+  if (!fn||!ln||!co||!em) { showAlert('err-req','Please fill in all required fields.'); return; }
+  if (!em.includes('@')||!em.includes('.')) { showAlert('err-req','Please enter a valid business email address.'); return; }
+  var ph = (document.getElementById('req-ph').value||'').trim();
+  var rs = (document.getElementById('req-rs').value||'').trim();
+  var subject = encodeURIComponent('Portal Access Request — '+fn+' '+ln+' / '+co);
+  var body = encodeURIComponent(
+    'PINNATE CONSULTING LLC — PORTAL ACCESS REQUEST\n'+
+    '═══════════════════════════════════════════════\n\n'+
+    'Full Name : '+fn+' '+ln+'\nCompany   : '+co+'\nEmail     : '+em+'\n'+
+    'Phone     : '+(ph||'Not provided')+'\nReason    : '+(rs||'Not provided')+'\n\n'+
+    '───────────────────────────────────────────────\n'+
+    'ACTION: Verify subscription. If approved, open Admin Panel,\nenter User ID + password, and click Activate User.'
+  );
+  var a = document.createElement('a');
+  a.href = 'mailto:gamal@pinnateconsulting.com?subject='+subject+'&body='+body;
+  a.target = '_blank'; a.style.display = 'none';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function() {
+    document.getElementById('ok-req').classList.add('show');
+    var btn = document.getElementById('btn-req');
+    btn.disabled = true; btn.textContent = '✓ Request Submitted';
+    ['req-fn','req-ln','req-co','req-em','req-ph','req-rs'].forEach(function(id){ document.getElementById(id).value=''; });
+  }, 500);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  DENY REQUEST
+// ════════════════════════════════════════════════════════════════════════
+function denyRequest(num, name, email) {
+  var comment = (document.getElementById('comment-'+num).value||'').trim();
+  if (!comment) { alert('Please provide a reason in the comment box before denying.'); return; }
+  var subject = encodeURIComponent('Pinnate Consulting Portal Access Request — Update');
+  var body = encodeURIComponent(
+    'Dear '+name+',\n\nThank you for your interest in the Pinnate Consulting Client Portal.\n\n'+
+    'After reviewing your subscription status, we are unable to activate portal access at this time.\n\n'+
+    'Reason:\n'+comment+'\n\n'+
+    'If you believe this is an error, please contact us at gamal@pinnateconsulting.com or call +1 281 796 2525.\n\n'+
+    'Pinnate Consulting LLC'
+  );
+  var a = document.createElement('a');
+  a.href = 'mailto:'+email+'?subject='+subject+'&body='+body;
+  a.target = '_blank'; a.style.display = 'none';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  document.getElementById('badge-'+num).className = 'rc-badge badge-denied';
+  document.getElementById('badge-'+num).textContent = '✗ Access Denied';
+  var card = document.getElementById('req-card-'+num);
+  Array.from(card.querySelectorAll('.btn-approve,.btn-deny')).forEach(function(b){ b.disabled=true; b.style.opacity='.4'; });
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  MISC HELPERS
+// ════════════════════════════════════════════════════════════════════════
+function sfFilter(app) { document.getElementById('sf-app-path').textContent = app; }
+function sfSearch(q) {}
+function sfFilterDate(period, btn) {
+  document.querySelectorAll('.sf-filter-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+}
+function launchApp(filename, name) {
+  alert('Opening: '+name+'\n\nTo activate, update the launchApp() function with the correct URL for each application.');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  CHANGE PASSWORD MODAL
+// ════════════════════════════════════════════════════════════════════════
+function closePwModal() {
+  var ov = document.getElementById('pw-modal-overlay');
+  if (ov) ov.style.display = 'none';
+}
+function saveNewPassword() {
+  var np  = document.getElementById('pw-new').value;
+  var cp  = document.getElementById('pw-confirm').value;
+  var err = document.getElementById('pw-modal-err');
+  if (!np || np.length < 6) { err.textContent='Password must be at least 6 characters.'; err.style.display='block'; return; }
+  if (np !== cp) { err.textContent='Passwords do not match.'; err.style.display='block'; return; }
+  err.style.display = 'none';
+  if (currentUser && currentUser.userid && currentUser.role !== 'admin') {
+    callAPI({ action:'updateUser', userid:currentUser.userid, field:'password', value:np }, function(){});
+  }
+  closePwModal();
+  alert('✅ Password changed successfully!');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  EVENT LISTENERS
+// ════════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.addEventListener('mousedown', function(e) {
+    var el = e.target;
+    while (el && el !== document.body && !el.getAttribute('data-action')) el = el.parentElement;
+    if (!el) return;
+    var action = el.getAttribute('data-action');
+    if (!action) return;
+    if      (action==='tab-in')        switchTab('in');
+    else if (action==='tab-req')       switchTab('req');
+    else if (action==='signin')        validateAndLogin(e);
+    else if (action==='signout')       doSignOut();
+    else if (action==='panel-apps')    showDPanel('apps');
+    else if (action==='panel-storage') showDPanel('storage');
+    else if (action==='panel-manual')  showDPanel('manual');
+    else if (action==='panel-admin')   showAdminPanel();
+    else if (action==='add-request')   addRequestCard();
+    else if (action==='approve-1')     approveRequest(1,'Maria Johnson','maria.j@abchealthcare.com');
+    else if (action==='deny-1')        denyRequest(1,'Maria Johnson','maria.j@abchealthcare.com');
+    else if (action==='launch-1')      launchApp('app1.html','Application 1');
+    else if (action==='launch-2')      launchApp('app2.html','Application 2');
+    else if (action==='launch-3')      launchApp('app3.html','Application 3');
+    else if (action==='launch-4')      launchApp('app4.html','Application 4');
+    else if (action==='launch-5')      launchApp('app5.html','Application 5');
+    else if (action==='launch-6')      launchApp('app6.html','Application 6');
+    else if (action==='launch-7')      launchApp('app7.html','Application 7');
+    else if (action==='launch-8')      launchApp('app8.html','Application 8');
+    else if (action==='sf-1') sfFilter('App 1');
+    else if (action==='sf-2') sfFilter('App 2');
+    else if (action==='sf-3') sfFilter('App 3');
+    else if (action==='sf-4') sfFilter('App 4');
+    else if (action==='sf-5') sfFilter('App 5');
+    else if (action==='sf-6') sfFilter('App 6');
+    else if (action==='sfd-all')   sfFilterDate('all',el);
+    else if (action==='sfd-today') sfFilterDate('today',el);
+    else if (action==='sfd-week')  sfFilterDate('week',el);
+    else if (action==='sfd-month') sfFilterDate('month',el);
+  });
+
+  var pwField = document.getElementById('in-pw');
+  if (pwField) pwField.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.keyCode===13) validateAndLogin(e); });
+
+  var reqBtn = document.getElementById('btn-req');
+  if (reqBtn) reqBtn.addEventListener('click', doRequest);
+
+  var pwSave = document.getElementById('pw-save-btn');
+  var pwSkip = document.getElementById('pw-skip-btn');
+  if (pwSave) pwSave.addEventListener('mousedown', saveNewPassword);
+  if (pwSkip) pwSkip.addEventListener('mousedown', closePwModal);
+
+  var sfSearchEl = document.getElementById('sf-search-input');
+  if (sfSearchEl) sfSearchEl.addEventListener('input', function(){ sfSearch(this.value); });
+
+  var umSearch = document.getElementById('um-search');
+  if (umSearch) umSearch.addEventListener('input', function(){ refreshUsersTable(); });
+
+  function setUmFilter(f) { window._umFilter = f; refreshUsersTable(); }
+  var umfAll = document.getElementById('umf-all');
+  var umfAct = document.getElementById('umf-active');
+  var umfSus = document.getElementById('umf-suspended');
+  if (umfAll) umfAll.addEventListener('mousedown', function(){ setUmFilter('all'); });
+  if (umfAct) umfAct.addEventListener('mousedown', function(){ setUmFilter('active'); });
+  if (umfSus) umfSus.addEventListener('mousedown', function(){ setUmFilter('suspended'); });
+
+});
+</script>
+</body>
+</html>
