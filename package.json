@@ -1,9 +1,0 @@
-{
-  "name": "pinnate-portal-api",
-  "version": "1.0.0",
-  "description": "Pinnate Consulting Portal Backend API",
-  "main": "index.js",
-  "dependencies": {
-    "@azure/cosmos": "^4.0.0"
-  }
-}
